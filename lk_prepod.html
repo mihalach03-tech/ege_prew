@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Личный кабинет преподавателя — Подготовка к ЕГЭ по информатике</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@600&display=swap" rel="stylesheet">
+</head>
+<body>    
+    <div class="sidebar">
+        <ul>
+            <li><a href="lk_prew.html" class="active"><span>👤</span> <span>Личный кабинет</span></a></li>
+            <li><a href="index.html"><span>🏠</span> <span>Главная</span></a></li>
+            <li><a href="info.html"><span>ℹ️</span> <span>Дополнительно</span></a></li>
+            <li><a href="contacts.html"><span>📞</span> <span>Контакты</span></a></li>
+        </ul>
+    </div>
+    
+    <div class="head-block">
+        <div class="logo" id="logoContainer">
+            <img src="logo.png" alt="Логотип" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'40\' height=\'40\' viewBox=\'0 0 24 24\'><circle cx=\'12\' cy=\'12\' r=\'12\' fill=\'%231e293b\'/><text x=\'6\' y=\'18\' font-family=\'Inter\' font-size=\'14\' fill=\'white\'>ЕГЭ</text></svg>'">
+        </div>
+        <h1>Личный кабинет преподавателя</h1>
+    </div>
+    
+    <div id="teacher-cabinet">
+        <div class="cabinet-header">
+            <h2>ЛИЧНЫЙ КАБИНЕТ</h2>
+            <h3>Здравствуйте, Александр! 👋</h3>
+        </div>
+        
+        <div class="profile-card">
+            <div class="student-section">
+                <div class="student-title">
+                    <span>👨‍🎓</span> Статистика ученика: Михаил
+                </div>
+                
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-number">8</div>
+                        <div class="stat-label">Пройдено занятий</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">2</div>
+                        <div class="stat-label">Осталось занятий</div>
+                    </div>
+                </div>
+                
+                <h3>Прогресс курса</h3>
+                <div class="progress-section">
+                    <div class="progress-header">
+                        <span>10 занятий</span>
+                        <span>80%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 80%;"></div>
+                    </div>
+                </div>
+                
+                <h3>Ближайшие занятия</h3>
+                <div class="schedule-list">
+                    <div class="schedule-item">
+                        <span>📅</span> 15 марта в 13:40
+                    </div>
+                    <div class="schedule-item">
+                        <span>📅</span> 18 марта в 15:35
+                    </div>
+                </div>
+            </div>
+            
+            <h3>Домашние задания</h3>
+            
+            <div class="homework-item">
+                <div class="homework-header">
+                    <div class="homework-status done">✅</div>
+                    <span class="homework-title">Задание №1 - Проверено</span>
+                    <span class="homework-grade">оценка: 5</span>
+                </div>
+                
+                <div class="file-input-group">
+                    <label class="file-label" for="file1">📎 Прикрепить файл</label>
+                    <input type="file" id="file1">
+                </div>
+                
+                <div class="comment-input">
+                    <input type="text" placeholder="Комментарий к работе">
+                </div>
+            </div>
+            
+            <div class="homework-item">
+                <div class="homework-header">
+                    <div class="homework-status done">✅</div>
+                    <span class="homework-title">Задание №2 - Проверено</span>
+                    <span class="homework-grade">оценка: 4</span>
+                </div>
+                
+                <div class="file-input-group">
+                    <label class="file-label" for="file2">📎 Прикрепить файл</label>
+                    <input type="file" id="file2">
+                </div>
+                
+                <div class="comment-input">
+                    <input type="text" placeholder="Комментарий к работе">
+                </div>
+            </div>
+            
+            <div class="homework-item">
+                <div class="homework-header">
+                    <div class="homework-status pending">⏳</div>
+                    <span class="homework-title">Задание №3 - Ожидает</span>
+                </div>
+                
+                <div class="file-input-group">
+                    <label class="file-label" for="file3">📎 Прикрепить файл</label>
+                    <input type="file" id="file3">
+                </div>
+                
+                <div class="comment-input">
+                    <input type="text" placeholder="Комментарий к работе">
+                </div>
+                
+                <div style="margin-top: 20px;">
+                    <a href="dz.docx" class="check-btn">🔍 Проверить</a>
+                </div>
+            </div>
+
+            <div class="operations-section">
+                <h3>История операций ученика</h3>
+                
+                <div class="operation-item">
+                    <div class="operation-date">
+                        <span>📆</span>
+                        <span class="date-text">01.03.2026</span>
+                    </div>
+                    <div class="operation-student">Михаил</div>
+                    <div class="operation-amount">10 000 ₽</div>
+                    <a href="chek111.pdf" class="pdf-button" target="_blank" onclick="handlePdfClick(event)">
+                        Открыть чек (PDF)
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function handlePdfClick(event) {
+            const button = event.currentTarget;
+            
+            button.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                button.style.transform = '';
+            }, 200);
+            
+            console.log('Открывается файл chek111.pdf');
+            
+            return true;
+        }
+    </script>
+</body>
+</html>
