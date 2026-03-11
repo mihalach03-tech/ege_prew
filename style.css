@@ -1884,3 +1884,18 @@ html {
         -webkit-tap-highlight-color: transparent;
     }
 }
+
+/* Добавить в конец файла для отладки */
+@media (max-width: 768px) {
+    /* Визуальная подсказка, что карта загружена */
+    .contacts-photo::after {
+        display: none; /* Убрать после отладки */
+    }
+    
+    /* Убедиться, что карта не прозрачная */
+    .contacts-photo iframe {
+        opacity: 1 !important;
+        visibility: visible !important;
+        display: block !important;
+    }
+}
