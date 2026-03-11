@@ -4,9 +4,152 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Дополнительно — Подготовка к ЕГЭ по информатике</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@600&display=swap" rel="stylesheet">
 </head>
+<!-- Подключение jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+$(document).ready(function() {
+    // ===== БЕСКОНЕЧНАЯ КАРУСЕЛЬ ОТЗЫВОВ =====
+    const track = $('#reviewsTrack');
+    const cards = $('.review-card');
+    
+    if (track.length && cards.length > 0) {
+        // Клонируем карточки для создания эффекта бесконечности
+        cards.clone().appendTo(track);
+        cards.clone().prependTo(track);
+        
+        // Обновляем коллекцию карточек после клонирования
+        const allCards = $('.review-card');
+        const originalCount = cards.length;
+        let cardWidth = cards.first().outerWidth(true);
+        
+        // Начальная позиция - показываем оригинальные карточки
+        let currentIndex = originalCount;
+        let animationInProgress = false;
+        
+        // Функция для обновления позиции карусели
+        function updateCarousel(animate = true) {
+            if (animate) {
+                track.css('transition', 'transform 0.5s ease-in-out');
+            } else {
+                track.css('transition', 'none');
+            }
+            
+            track.css('transform', `translateX(-${currentIndex * cardWidth}px)`);
+        }
+        
+        // Функция для проверки и коррекции позиции (для бесконечности)
+        function checkInfinite() {
+            const totalCards = allCards.length;
+            
+            // Если дошли до конца клонированных карточек
+            if (currentIndex >= totalCards - originalCount) {
+                // Мгновенно перескакиваем в начало без анимации
+                setTimeout(function() {
+                    track.css('transition', 'none');
+                    currentIndex = originalCount;
+                    track.css('transform', `translateX(-${currentIndex * cardWidth}px)`);
+                    
+                    // Возвращаем анимацию
+                    setTimeout(function() {
+                        track.css('transition', 'transform 0.5s ease-in-out');
+                    }, 50);
+                }, 500);
+            }
+            
+            // Если дошли до начала клонированных карточек
+            if (currentIndex <= 0) {
+                // Мгновенно перескакиваем в конец без анимации
+                setTimeout(function() {
+                    track.css('transition', 'none');
+                    currentIndex = totalCards - originalCount * 2;
+                    track.css('transform', `translateX(-${currentIndex * cardWidth}px)`);
+                    
+                    // Возвращаем анимацию
+                    setTimeout(function() {
+                        track.css('transition', 'transform 0.5s ease-in-out');
+                    }, 50);
+                }, 500);
+            }
+            
+            // Обновляем активную точку
+            let dotIndex = (currentIndex - originalCount) % originalCount;
+            if (dotIndex < 0) dotIndex += originalCount;
+            
+            $('.carousel-dot').removeClass('active');
+            $(`.carousel-dot[data-index="${dotIndex}"]`).addClass('active');
+        }
+        
+        // Обработчик для кнопки "Влево"
+        $('#slideLeft').click(function() {
+            if (animationInProgress) return;
+            animationInProgress = true;
+            
+            currentIndex--;
+            updateCarousel(true);
+            
+            setTimeout(function() {
+                animationInProgress = false;
+                checkInfinite();
+            }, 500);
+        });
+        
+        // Обработчик для кнопки "Вправо"
+        $('#slideRight').click(function() {
+            if (animationInProgress) return;
+            animationInProgress = true;
+            
+            currentIndex++;
+            updateCarousel(true);
+            
+            setTimeout(function() {
+                animationInProgress = false;
+                checkInfinite();
+            }, 500);
+        });
+        
+        // Добавляем индикаторы (точки) для навигации
+        const dotsContainer = $('<div class="carousel-dots"></div>');
+        for (let i = 0; i < originalCount; i++) {
+            const dot = $(`<button class="carousel-dot" data-index="${i}"></button>`);
+            dot.click(function() {
+                if (animationInProgress) return;
+                animationInProgress = true;
+                
+                const targetDotIndex = $(this).data('index');
+                const targetIndex = originalCount + targetDotIndex;
+                
+                currentIndex = targetIndex;
+                updateCarousel(true);
+                
+                setTimeout(function() {
+                    animationInProgress = false;
+                }, 500);
+            });
+            dotsContainer.append(dot);
+        }
+        $('.reviews-section').append(dotsContainer);
+        
+        // Инициализация
+        updateCarousel(false);
+        checkInfinite();
+        
+        // Обновляем ширину карточки при изменении размера окна
+        $(window).resize(function() {
+            cardWidth = cards.first().outerWidth(true);
+            updateCarousel(false);
+            checkInfinite();
+        });
+        
+        // Обработка окончания анимации
+        track.on('transitionend', function() {
+            checkInfinite();
+        });
+    }
+});
+</script>
 <body>    
     <div class="sidebar">
         <ul>
@@ -103,28 +246,57 @@
             </div>
             
             <!-- Отзывы -->
-            <div class="reviews-section">
-                <h3>Отзывы наших учеников</h3>
-                <div class="reviews-grid">
-                    <div class="review-card">
-                        <span class="review-author">Анастасия</span>
-                        <p class="review-text">"Здорово! Подготовилась за полгода с нуля, сдала на 78 баллов"</p>
-                        <div class="review-rating">★★★★★</div>
-                    </div>
-                    
-                    <div class="review-card">
-                        <span class="review-author">Дмитрий</span>
-                        <p class="review-text">"Волшебно! Очень понятные объяснения, разобрали все сложные моменты"</p>
-                        <div class="review-rating">★★★★★</div>
-                    </div>
-                    
-                    <div class="review-card">
-                        <span class="review-author">Сергей</span>
-                        <p class="review-text">"Шикарно! Поступил в МГТУ им. Баумана, спасибо за подготовку"</p>
-                        <div class="review-rating">★★★★★</div>
-                    </div>
+            <!-- Отзывы с каруселью -->
+	<div class="reviews-section">
+    <h3>Отзывы наших учеников</h3>
+    
+    <!-- Контейнер для карусели -->
+    <div class="carousel-container">
+        <!-- Кнопка "влево" -->
+        <button class="carousel-btn carousel-btn-left" id="slideLeft">←</button>
+        
+        <!-- Обертка для карточек с отзывами -->
+        <div class="carousel-track-wrapper">
+            <div class="reviews-grid carousel-track" id="reviewsTrack">
+                <!-- Существующие отзывы (оставляем как есть) -->
+                <div class="review-card">
+                    <span class="review-author">Анастасия</span>
+                    <p class="review-text">"Здорово! Подготовилась за полгода с нуля, сдала на 78 баллов"</p>
+                    <div class="review-rating">★★★★★</div>
+                </div>
+                
+                <div class="review-card">
+                    <span class="review-author">Дмитрий</span>
+                    <p class="review-text">"Волшебно! Очень понятные объяснения, разобрали все сложные моменты"</p>
+                    <div class="review-rating">★★★★★</div>
+                </div>
+                
+                <div class="review-card">
+                    <span class="review-author">Сергей</span>
+                    <p class="review-text">"Шикарно! Поступил в МГТУ им. Баумана, спасибо за подготовку"</p>
+                    <div class="review-rating">★★★★★</div>
+                </div>
+                
+                <!-- ДОБАВЛЯЕМ НОВЫЙ ОТЗЫВ (четвертый) -->
+                <div class="review-card">
+                    <span class="review-author">Екатерина</span>
+                    <p class="review-text">"Прекрасно! За 3 месяца подтянула информатику с 50 до 87 баллов. Очень довольна результатом!"</p>
+                    <div class="review-rating">★★★★★</div>
+                </div>
+                
+                <!-- ЕЩЕ ОДИН НОВЫЙ ОТЗЫВ (пятый) -->
+                <div class="review-card">
+                    <span class="review-author">Михаил</span>
+                    <p class="review-text">"Отлично! Сдал на 92 балла, поступил в ИТМО. Спасибо за качественную подготовку и поддержку!"</p>
+                    <div class="review-rating">★★★★★</div>
                 </div>
             </div>
+        </div>
+        
+        <!-- Кнопка "вправо" -->
+        <button class="carousel-btn carousel-btn-right" id="slideRight">→</button>
+    </div>
+</div>
         </div>
     </div>
 </body>
