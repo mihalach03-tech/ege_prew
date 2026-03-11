@@ -7,7 +7,7 @@
 
 body {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    background: url('../backg.jpg') no-repeat center center fixed;
+    background: url('backg.jpg') no-repeat center center fixed;
     background-size: cover;
     min-height: 100vh;
     display: flex;
@@ -29,7 +29,7 @@ body {
     -webkit-backdrop-filter: blur(10px);
     border-radius: 40px;
     padding: 20px 12px;
-    width: 220px; /* Увеличили ширину */
+    width: 220px;
     box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
     z-index: 1000;
     border: 1px solid rgba(255, 255, 255, 0.5);
@@ -51,7 +51,7 @@ body {
     border-radius: 24px;
     transition: all 0.2s ease;
     font-size: 14px;
-    white-space: nowrap; /* Запрещаем перенос текста */
+    white-space: nowrap;
 }
 
 .sidebar a:hover,
@@ -60,7 +60,6 @@ body {
     color: white;
 }
 
-/* Стили для span внутри ссылок меню */
 .sidebar a span {
     display: inline;
 }
@@ -116,14 +115,13 @@ h1 {
 #about, #news, #contacts, #booking, #about-course, #login-section,
 #student-cabinet, #teacher-cabinet, #lab-work {
     margin-top: 30px;
-    margin-left: 260px; /* Увеличили отступ из-за более широкого меню */
+    margin-left: 260px;
     width: 1000px;
     max-width: calc(100% - 280px);
     scroll-margin-top: 30px;
     padding: 20px 0 40px 0;
 }
 
-/* Специально для страницы входа */
 #login-section {
     padding: 40px 0 60px 0;
     display: flex;
@@ -266,7 +264,6 @@ input[type="submit"]:hover {
     color: white;
 }
 
-/* Специально для кнопки входа */
 .login-btn {
     width: 80%;
     display: block;
@@ -664,7 +661,7 @@ select.error {
 .homework-list {
     display: flex;
     flex-direction: column;
-    gap: 14px; /* Уменьшаем расстояние между элементами */
+    gap: 14px;
     margin: 20px 0;
 }
 
@@ -700,8 +697,8 @@ select.error {
     box-shadow: 0 5px 12px -5px rgba(0, 0, 0, 0.2);
     text-decoration: none;
     display: inline-block;
-    margin-left: auto; /* Это прижимает кнопку к правому краю */
-    white-space: nowrap; /* Запрещаем перенос текста */
+    margin-left: auto;
+    white-space: nowrap;
 }
 
 .check-btn:hover {
@@ -1211,7 +1208,7 @@ html {
 /* Планшеты (вертикальная ориентация) и большие телефоны */
 @media (max-width: 768px) {
     body {
-        padding: 10px 10px 80px 10px;
+        padding: 10px 10px 100px 10px; /* Увеличил нижний отступ, чтобы контент не скрывался за меню */
     }
     
     /* Мобильное меню - ВНИЗУ ЭКРАНА */
@@ -1241,7 +1238,7 @@ html {
     }
     
     .sidebar a {
-        padding: 12px 0;
+        padding: 8px 0; /* Уменьшил вертикальные отступы */
         font-size: 0;
         text-align: center;
         border-radius: 30px;
@@ -1251,6 +1248,9 @@ html {
         transition: all 0.2s ease;
         background: transparent;
         margin: 0 2px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
     
     .sidebar a.active {
@@ -1265,49 +1265,58 @@ html {
         transform: translateY(-2px);
     }
     
-    /* Иконки через псевдоэлементы */
+    /* Круглая обводка для иконок */
+    .sidebar a::before {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 44px;
+        height: 44px;
+        background: white;
+        border-radius: 50%;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(255, 255, 255, 0.8);
+        font-size: 24px;
+        transition: all 0.2s ease;
+        margin: 0 auto;
+    }
+    
     .sidebar a[href="lk_prew.html"]::before,
     .sidebar a[href="lk.html"]::before,
     .sidebar a[href="lk_prepod.html"]::before {
         content: "👤";
-        font-size: 24px;
-        display: inline-block;
-        filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
-        transition: transform 0.2s ease;
     }
     
     .sidebar a[href="index.html"]::before {
         content: "🏠";
-        font-size: 24px;
-        display: inline-block;
-        filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
-        transition: transform 0.2s ease;
     }
     
     .sidebar a[href="info.html"]::before {
         content: "ℹ️";
-        font-size: 24px;
-        display: inline-block;
-        filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
-        transition: transform 0.2s ease;
     }
     
     .sidebar a[href="contacts.html"]::before {
         content: "📞";
-        font-size: 24px;
-        display: inline-block;
-        filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
-        transition: transform 0.2s ease;
     }
     
     .sidebar a:hover::before {
-        transform: scale(1.15);
-        filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.15));
+        transform: scale(1.1);
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15), 0 0 0 2px white;
     }
     
     .sidebar a:active::before {
         transform: scale(0.95);
         transition: transform 0.05s ease;
+    }
+    
+    .sidebar a.active::before {
+        background: #1e293b;
+        color: white;
+        box-shadow: 0 4px 12px rgba(30, 41, 59, 0.3), 0 0 0 2px white;
+    }
+    
+    /* Для страницы входа меняем содержимое иконки */
+    .sidebar a[href="login.html"]::before {
+        content: "🔑";
     }
     
     .sidebar a span {
@@ -1336,7 +1345,7 @@ html {
         margin: 15px 0;
         width: 100%;
         max-width: 100%;
-        padding: 20px 0;
+        padding: 20px 0 40px 0;
     }
     
     /* Специально для страницы входа на мобильных */
@@ -1522,23 +1531,14 @@ html {
     .operation-amount {
         margin-left: 35px;
     }
-    
-    /* Эффект для активной иконки */
-    .sidebar a.active {
-        background: rgba(30, 41, 59, 0.15);
-        box-shadow: 0 4px 12px rgba(30, 41, 59, 0.2);
-    }
-    
-    .sidebar a.active::before {
-        transform: scale(1.1);
-        filter: drop-shadow(0 4px 6px rgba(30, 41, 59, 0.3));
-    }
 }
 
 /* Маленькие телефоны */
 @media (max-width: 480px) {
     .sidebar a::before {
-        font-size: 22px !important;
+        width: 40px;
+        height: 40px;
+        font-size: 22px;
     }
     
     .sidebar {
@@ -1668,7 +1668,9 @@ html {
 /* Очень маленькие телефоны */
 @media (max-width: 320px) {
     .sidebar a::before {
-        font-size: 20px !important;
+        width: 36px;
+        height: 36px;
+        font-size: 20px;
     }
     
     .head-block h1 {
@@ -1714,9 +1716,8 @@ html {
     will-change: transform;
 }
 
-/* Карточки отзывов внутри карусели */
 .carousel-track .review-card {
-    flex: 0 0 calc(33.333% - 16px); /* По умолчанию 3 карточки */
+    flex: 0 0 calc(33.333% - 16px);
     min-width: 280px;
     background: white;
     border-radius: 28px;
@@ -1734,7 +1735,6 @@ html {
     background: rgba(255, 255, 255, 1);
 }
 
-/* Кнопки карусели */
 .carousel-btn {
     width: 48px;
     height: 48px;
@@ -1769,7 +1769,6 @@ html {
     pointer-events: none;
 }
 
-/* Индикаторы (точки) */
 .carousel-dots {
     display: flex;
     justify-content: center;
@@ -1795,10 +1794,9 @@ html {
     border-radius: 12px;
 }
 
-/* Адаптация для планшетов */
 @media (max-width: 768px) {
     .carousel-track .review-card {
-        flex: 0 0 calc(50% - 12px); /* На планшете 2 карточки */
+        flex: 0 0 calc(50% - 12px);
     }
     
     .carousel-btn {
@@ -1808,10 +1806,9 @@ html {
     }
 }
 
-/* Адаптация для мобильных */
 @media (max-width: 480px) {
     .carousel-track .review-card {
-        flex: 0 0 100%; /* На мобильных 1 карточка */
+        flex: 0 0 100%;
     }
     
     .carousel-container {
