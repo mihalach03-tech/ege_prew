@@ -6,9 +6,6 @@
     <title>Контакты — Подготовка к ЕГЭ по информатике</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@600&display=swap" rel="stylesheet">
-    
-    <!-- Подключение API Яндекс Карт с вашим ключом -->
-    <script src="https://api-maps.yandex.ru/2.1/?apikey=f5c2d8ea-618f-4a41-a942-e3aebcf95d36&lang=ru_RU" type="text/javascript"></script>
 </head>
 <body>    
     <div class="sidebar">
@@ -57,9 +54,9 @@
         </div>
         
         <div class="contacts-photo">
-            <div class="photo" style="height: 350px;">
+            <div class="photo" style="height: 350px; position: relative; overflow: hidden;">
                 <!-- Контейнер для Яндекс Карты -->
-                <div id="map" style="width: 100%; height: 100%;"></div>
+                <div id="map" style="width: 100%; height: 100%; position: relative; z-index: 1;"></div>
             </div>
         </div>
     </div>
@@ -130,29 +127,37 @@
         }
     </style>
 
+    <!-- Подключение API Яндекс Карт с вашим ключом - перенес в конец body для лучшей загрузки -->
+    <script src="https://api-maps.yandex.ru/2.1/?apikey=f5c2d8ea-618f-4a41-a942-e3aebcf95d36&lang=ru_RU" type="text/javascript"></script>
+    
     <script>
         // Глобальная переменная для карты
         var myMap;
         
-        // Инициализация карты
-        ymaps.ready(initMap);
-        
+        // Функция инициализации карты
         function initMap() {
+            // Проверяем, существует ли элемент map
+            var mapElement = document.getElementById('map');
+            if (!mapElement) {
+                console.error('Элемент карты не найден');
+                return;
+            }
+            
             try {
-                // Координаты центра (ул. Фрунзе, 18, Тула)
+                // Координаты центра (ул. Фрунзе, 18, Тула) - уточненные координаты
                 var mapCenter = [54.189371, 37.590821];
                 
                 // Создаем карту
                 myMap = new ymaps.Map('map', {
                     center: mapCenter,
-                    zoom: 16,
-                    controls: ['zoomControl', 'fullscreenControl']
+                    zoom: 17,
+                    controls: ['zoomControl', 'fullscreenControl', 'geolocationControl']
                 });
                 
                 // Создание метки
                 var placemark = new ymaps.Placemark(mapCenter, {
-                    hintContent: 'ул. Фрунзе, 18',
-                    balloonContent: '<strong>Подготовка к ЕГЭ</strong><br>ул. Фрунзе, 18<br>Тула'
+                    hintContent: 'Подготовка к ЕГЭ по информатике',
+                    balloonContent: '<strong>Подготовка к ЕГЭ</strong><br>ул. Фрунзе, 18<br>Тула<br>☎ +7 (999) 123-45-67'
                 }, {
                     preset: 'islands#redIcon',
                     iconColor: '#1e293b'
@@ -162,23 +167,33 @@
                 
                 // Принудительно обновляем карту после загрузки
                 setTimeout(function() {
-                    myMap.container.fitToViewport();
+                    if (myMap) {
+                        myMap.container.fitToViewport();
+                    }
                 }, 200);
                 
-                // Обновляем карту при изменении размера окна
-                window.addEventListener('resize', function() {
-                    if (myMap) {
-                        setTimeout(function() {
-                            myMap.container.fitToViewport();
-                        }, 100);
-                    }
-                });
+                console.log('Карта успешно загружена');
                 
             } catch (error) {
                 console.error('Ошибка загрузки карты:', error);
-                document.getElementById('map').innerHTML = '<div style="width: 100%; height: 100%; background: #f1f5f9; display: flex; align-items: center; justify-content: center; border-radius: 32px; color: #64748b;">Карта временно недоступна</div>';
+                mapElement.innerHTML = '<div style="width: 100%; height: 100%; background: #f1f5f9; display: flex; align-items: center; justify-content: center; border-radius: 24px; color: #64748b; text-align: center; padding: 20px;">Карта временно недоступна. Пожалуйста, попробуйте позже.</div>';
             }
         }
+        
+        // Ждем загрузки API и DOM
+        ymaps.ready(function() {
+            // Небольшая задержка, чтобы убедиться, что DOM полностью загружен
+            setTimeout(initMap, 100);
+        });
+        
+        // Обновляем карту при изменении размера окна
+        window.addEventListener('resize', function() {
+            if (myMap) {
+                setTimeout(function() {
+                    myMap.container.fitToViewport();
+                }, 100);
+            }
+        });
         
         // Функция открытия модального окна
         function showSuccessModal() {
@@ -231,7 +246,8 @@
             // Телефон
             const phoneInput = document.getElementById('phone');
             const phoneError = document.getElementById('phoneError');
-            const phoneRegex = /^\+7\s?\(?\d{3}\)?\s?\d{3}\s?-?\d{2}\s?-?\d{2}$/;
+            // Упрощенная проверка телефона
+            const phoneRegex = /^(\+7|7|8)?[\s\-]?\(?[0-9]{3}\)?[\s\-]?[0-9]{3}[\s\-]?[0-9]{2}[\s\-]?[0-9]{2}$/;
             if (phoneInput.value.trim() === '' || !phoneRegex.test(phoneInput.value.trim())) {
                 phoneInput.classList.add('error');
                 phoneError.classList.add('show');
