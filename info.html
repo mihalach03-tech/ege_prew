@@ -11,7 +11,7 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
 $(document).ready(function() {
-    // ===== КАРУСЕЛЬ ОТЗЫВОВ С КНОПКАМИ =====
+    // ===== КАРУСЕЛЬ ОТЗЫВОВ =====
     const track = $('#reviewsTrack');
     const cards = $('.review-card');
     
@@ -20,7 +20,7 @@ $(document).ready(function() {
         let currentIndex = 0;
         let animationInProgress = false;
         
-        // Функция для обновления позиции карусели
+        // Функция для обновления позиции
         function updateCarousel(animate = true) {
             const cardWidth = cards.first().outerWidth(true);
             
@@ -32,38 +32,25 @@ $(document).ready(function() {
             
             track.css('transform', `translateX(-${currentIndex * cardWidth}px)`);
             
-            // Обновляем видимость кнопок на мобильных
-            updateButtonsVisibility();
+            // Обновляем состояние кнопок
+            updateButtons();
         }
         
-        // Функция для обновления видимости кнопок
-        function updateButtonsVisibility() {
-            const isMobile = window.innerWidth <= 768;
+        // Функция для обновления кнопок
+        function updateButtons() {
+            $('#slideLeft').prop('disabled', currentIndex === 0);
+            $('#slideRight').prop('disabled', currentIndex === originalCount - 1);
             
-            if (isMobile) {
-                // На мобильных показываем кнопки всегда
-                $('.carousel-btn').show();
-                
-                // Дизейблим кнопки по краям
-                $('#slideLeft').prop('disabled', currentIndex === 0);
-                $('#slideRight').prop('disabled', currentIndex === originalCount - 1);
-            } else {
-                // На десктопе скрываем кнопки, если отзывов мало
-                if (originalCount <= 3) {
-                    $('.carousel-btn').hide();
-                } else {
-                    $('.carousel-btn').show();
-                }
-            }
+            // Обновляем активную точку
+            $('.carousel-dot').removeClass('active');
+            $(`.carousel-dot[data-index="${currentIndex}"]`).addClass('active');
         }
         
-        // Обработчик для кнопки "Влево"
+        // Кнопка "Влево"
         $('#slideLeft').click(function() {
-            if (animationInProgress) return;
-            if (currentIndex === 0) return; // Не листаем дальше первого
+            if (animationInProgress || currentIndex === 0) return;
             
             animationInProgress = true;
-            
             currentIndex--;
             updateCarousel(true);
             
@@ -72,13 +59,11 @@ $(document).ready(function() {
             }, 500);
         });
         
-        // Обработчик для кнопки "Вправо"
+        // Кнопка "Вправо"
         $('#slideRight').click(function() {
-            if (animationInProgress) return;
-            if (currentIndex === originalCount - 1) return; // Не листаем дальше последнего
+            if (animationInProgress || currentIndex === originalCount - 1) return;
             
             animationInProgress = true;
-            
             currentIndex++;
             updateCarousel(true);
             
@@ -87,7 +72,7 @@ $(document).ready(function() {
             }, 500);
         });
         
-        // Добавляем индикаторы (точки) для навигации
+        // Точки навигации
         const dotsContainer = $('<div class="carousel-dots"></div>');
         for (let i = 0; i < originalCount; i++) {
             const dot = $(`<button class="carousel-dot" data-index="${i}"></button>`);
@@ -95,7 +80,6 @@ $(document).ready(function() {
                 if (animationInProgress) return;
                 
                 const targetIndex = $(this).data('index');
-                
                 if (targetIndex === currentIndex) return;
                 
                 animationInProgress = true;
@@ -112,58 +96,12 @@ $(document).ready(function() {
         
         // Инициализация
         updateCarousel(false);
-        updateButtonsVisibility();
+        updateButtons();
         
         // Обновляем при изменении размера окна
         $(window).resize(function() {
             updateCarousel(false);
-            updateButtonsVisibility();
         });
-        
-        // Обновляем активную точку
-        function updateActiveDot() {
-            $('.carousel-dot').removeClass('active');
-            $(`.carousel-dot[data-index="${currentIndex}"]`).addClass('active');
-        }
-        
-        // Добавляем обновление точек после анимации
-        track.on('transitionend', function() {
-            updateActiveDot();
-        });
-        
-        updateActiveDot();
-    }
-    
-    // ===== ИНИЦИАЛИЗАЦИЯ КАРТЫ =====
-    // Загружаем API Яндекс Карт
-    const script = document.createElement('script');
-    script.src = "https://api-maps.yandex.ru/2.1/?apikey=ваш-ключ-API&lang=ru_RU";
-    script.type = "text/javascript";
-    script.onload = function() {
-        ymaps.ready(initMap);
-    };
-    document.head.appendChild(script);
-    
-    function initMap() {
-        // Создаем карту
-        const map = new ymaps.Map("map", {
-            center: [55.751574, 37.573856], // Координаты центра Москвы
-            zoom: 15,
-            controls: ['zoomControl', 'fullscreenControl']
-        });
-        
-        // Добавляем метку
-        const placemark = new ymaps.Placemark([55.751574, 37.573856], {
-            hintContent: 'Наш офис',
-            balloonContent: 'Подготовка к ЕГЭ по информатике'
-        }, {
-            preset: 'islands#redIcon'
-        });
-        
-        map.geoObjects.add(placemark);
-        
-        // Делаем карту адаптивной
-        map.container.fitToViewport();
     }
 });
 </script>
@@ -228,7 +166,7 @@ $(document).ready(function() {
                 </div>
             </div>
             
-            <!-- Цены - два блока -->
+            <!-- Цены -->
             <div class="prices-section">
                 <h3>Стоимость занятий</h3>
                 <div class="prices-grid">
@@ -268,13 +206,12 @@ $(document).ready(function() {
                 
                 <!-- Контейнер для карусели -->
                 <div class="carousel-container">
-                    <!-- Кнопка "влево" -->
+                    <!-- Кнопка "влево" слева от отзыва -->
                     <button class="carousel-btn carousel-btn-left" id="slideLeft">←</button>
                     
                     <!-- Обертка для карточек с отзывами -->
                     <div class="carousel-track-wrapper">
                         <div class="reviews-grid carousel-track" id="reviewsTrack">
-                            <!-- Существующие отзывы -->
                             <div class="review-card">
                                 <span class="review-author">Анастасия</span>
                                 <p class="review-text">"Здорово! Подготовилась за полгода с нуля, сдала на 78 баллов"</p>
@@ -293,33 +230,23 @@ $(document).ready(function() {
                                 <div class="review-rating">★★★★★</div>
                             </div>
                             
-                            <!-- ДОБАВЛЯЕМ НОВЫЙ ОТЗЫВ (четвертый) -->
                             <div class="review-card">
                                 <span class="review-author">Екатерина</span>
-                                <p class="review-text">"Прекрасно! За 3 месяца подтянула информатику с 50 до 87 баллов. Очень довольна результатом!"</p>
+                                <p class="review-text">"Прекрасно! За 3 месяца подтянула информатику с 50 до 87 баллов"</p>
                                 <div class="review-rating">★★★★★</div>
                             </div>
                             
-                            <!-- ЕЩЕ ОДИН НОВЫЙ ОТЗЫВ (пятый) -->
                             <div class="review-card">
                                 <span class="review-author">Михаил</span>
-                                <p class="review-text">"Отлично! Сдал на 92 балла, поступил в ИТМО. Спасибо за качественную подготовку и поддержку!"</p>
+                                <p class="review-text">"Отлично! Сдал на 92 балла, поступил в ИТМО. Спасибо!"</p>
                                 <div class="review-rating">★★★★★</div>
                             </div>
                         </div>
                     </div>
                     
-                    <!-- Кнопка "вправо" -->
+                    <!-- Кнопка "вправо" справа от отзыва -->
                     <button class="carousel-btn carousel-btn-right" id="slideRight">→</button>
                 </div>
-            </div>
-            
-            <!-- КОНТАКТЫ С КАРТОЙ -->
-            <div class="contacts-section" style="margin-top: 60px;">
-                <h3>Как нас найти</h3>
-                
-                <!-- Контактная информация -->
-                
             </div>
         </div>
     </div>
