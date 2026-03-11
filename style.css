@@ -1689,6 +1689,9 @@ html {
 }
 
 /* ===== КАРУСЕЛЬ ОТЗЫВОВ ===== */
+/* ===== ИСПРАВЛЕНИЯ ДЛЯ КАРУСЕЛИ ОТЗЫВОВ ===== */
+
+/* Десктоп версия - кнопки по бокам */
 .carousel-container {
     display: flex;
     align-items: center;
@@ -1724,12 +1727,6 @@ html {
     border: 1px solid rgba(255, 255, 255, 0.8);
     backdrop-filter: blur(5px);
     -webkit-backdrop-filter: blur(5px);
-}
-
-.carousel-track .review-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.2);
-    background: rgba(255, 255, 255, 1);
 }
 
 .carousel-btn {
@@ -1791,85 +1788,71 @@ html {
     border-radius: 12px;
 }
 
-/* Десктоп версия */
-@media (min-width: 769px) {
-    .carousel-track {
-        cursor: grab;
-        user-select: none;
-        -webkit-user-select: none;
-    }
-    
-    .carousel-track:active {
-        cursor: grabbing;
-    }
-}
-
-/* Мобильная версия - ТОЛЬКО ОДИН ОТЗЫВ */
+/* МОБИЛЬНАЯ ВЕРСИЯ - кнопки по бокам, листание по одному */
 @media (max-width: 768px) {
-    /* Отключаем карусель - показываем только один отзыв */
     .carousel-container {
-        flex-direction: column;
-        gap: 20px;
+        gap: 8px;
+        padding: 0 5px;
     }
     
     .carousel-track-wrapper {
-        width: 100%;
-        overflow: visible;
+        width: calc(100% - 90px); /* Оставляем место для кнопок */
     }
     
     .carousel-track {
-        display: grid;
-        grid-template-columns: 1fr;
         gap: 0;
-        transform: none !important; /* Отключаем трансформацию */
     }
     
     .carousel-track .review-card {
-        flex: none;
-        width: 100%;
-        min-width: auto;
-        display: block;
-        margin: 0 auto;
+        flex: 0 0 100%;
+        min-width: 100%;
+        margin: 0;
     }
     
-    /* Скрываем все отзывы кроме первого */
-    .carousel-track .review-card:not(:first-child) {
-        display: none;
-    }
-    
-    /* Отключаем кнопки навигации */
     .carousel-btn {
-        display: none;
+        width: 40px;
+        height: 40px;
+        font-size: 20px;
+        background: #1e293b;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        position: static; /* Убираем абсолютное позиционирование */
+        opacity: 1;
+        visibility: visible;
     }
     
-    /* Отключаем точки */
+    .carousel-btn-left {
+        margin-right: 5px;
+    }
+    
+    .carousel-btn-right {
+        margin-left: 5px;
+    }
+    
+    /* Точки навигации */
     .carousel-dots {
-        display: none;
+        margin-top: 15px;
     }
     
-    /* Отключаем все свайп-функциональность */
-    .carousel-track {
-        cursor: default;
-        user-select: text;
-        -webkit-user-select: text;
-        touch-action: auto;
-        -webkit-overflow-scrolling: auto;
-        scroll-snap-type: none;
+    .carousel-dot {
+        width: 8px;
+        height: 8px;
     }
     
-    .carousel-track:active {
-        cursor: default;
+    .carousel-dot.active {
+        width: 20px;
     }
 }
 
-/* Маленькие телефоны */
+/* Очень маленькие телефоны */
 @media (max-width: 480px) {
-    .carousel-container {
-        margin: 20px 0;
+    .carousel-track-wrapper {
+        width: calc(100% - 70px);
     }
     
-    .carousel-track .review-card {
-        padding: 24px;
+    .carousel-btn {
+        width: 35px;
+        height: 35px;
+        font-size: 18px;
     }
 }
 
@@ -1980,4 +1963,5 @@ html {
         display: none;
     }
 }
+
 
