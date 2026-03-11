@@ -4,8 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Контакты — Подготовка к ЕГЭ по информатике</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@600&display=swap" rel="stylesheet">
+    
+    <!-- Подключение API Яндекс Карт с вашим ключом -->
+    <script src="https://api-maps.yandex.ru/2.1/?apikey=f5c2d8ea-618f-4a41-a942-e3aebcf95d36&lang=ru_RU" type="text/javascript"></script>
 </head>
 <body>    
     <div class="sidebar">
@@ -54,10 +57,8 @@
         </div>
         
         <div class="contacts-photo">
-            <div class="photo" style="height: 350px; position: relative; overflow: hidden;">
-                <!-- Контейнер для Яндекс Карты -->
-                <div id="map" style="width: 100%; height: 100%; position: relative; z-index: 1;"></div>
-            </div>
+            <!-- Контейнер для Яндекс Карты -->
+            <div id="map" style="width: 100%; height: 300px; border-radius: 32px; overflow: hidden; box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.3);"></div>
         </div>
     </div>
     
@@ -82,10 +83,10 @@
                 <div class="form-group">
                     <label>Дата и время занятия</label>
                     <select name="city" id="city">
-                        <option value="1" selected>15 марта, 13:40</option>
-                        <option value="2">15 марта, 15:00</option>
-                        <option value="3">20 марта, 13:40</option>
-                        <option value="4">23 марта, 15:00</option>
+                        <option value="1" selected>1 марта, 13:40</option>
+                        <option value="2">1 марта, 15:00</option>
+                        <option value="3">2 марта, 13:40</option>
+                        <option value="4">3 марта, 15:00</option>
                     </select>
                 </div>
                 
@@ -114,6 +115,7 @@
         </div>
     </div>
 
+    <!-- Добавьте стили для анимации модального окна -->
     <style>
         @keyframes modalSlideUp {
             from {
@@ -125,80 +127,65 @@
                 transform: translateY(0);
             }
         }
-    </style>
-
-    <!-- Подключение API Яндекс Карт с вашим ключом - перенес в конец body для лучшей загрузки -->
-    <script src="https://api-maps.yandex.ru/2.1/?apikey=f5c2d8ea-618f-4a41-a942-e3aebcf95d36&lang=ru_RU" type="text/javascript"></script>
-    
-    <script>
-        // Глобальная переменная для карты
-        var myMap;
         
-        // Функция инициализации карты
-        function initMap() {
-            // Проверяем, существует ли элемент map
-            var mapElement = document.getElementById('map');
-            if (!mapElement) {
-                console.error('Элемент карты не найден');
-                return;
+        @media (max-width: 768px) {
+            #successModal > div {
+                padding: 30px;
+                width: 95%;
             }
             
+            #successModal h3 {
+                font-size: 24px;
+            }
+            
+            #successModal p {
+                font-size: 15px;
+            }
+        }
+    </style>
+
+    <script>
+        // Инициализация карты
+        ymaps.ready(initMap);
+        
+        function initMap() {
             try {
-                // Координаты центра (ул. Фрунзе, 18, Тула) - уточненные координаты
+                // Координаты центра (ул. Фрунзе, 18, Тула)
                 var mapCenter = [54.189371, 37.590821];
                 
-                // Создаем карту
-                myMap = new ymaps.Map('map', {
+                var map = new ymaps.Map('map', {
                     center: mapCenter,
-                    zoom: 17,
-                    controls: ['zoomControl', 'fullscreenControl', 'geolocationControl']
+                    zoom: 16,
+                    controls: ['zoomControl', 'fullscreenControl']
                 });
                 
                 // Создание метки
                 var placemark = new ymaps.Placemark(mapCenter, {
-                    hintContent: 'Подготовка к ЕГЭ по информатике',
-                    balloonContent: '<strong>Подготовка к ЕГЭ</strong><br>ул. Фрунзе, 18<br>Тула<br>☎ +7 (999) 123-45-67'
+                    hintContent: 'ул. Фрунзе, 18',
+                    balloonContent: '<strong>Подготовка к ЕГЭ</strong><br>ул. Фрунзе, 18<br>Тула'
                 }, {
                     preset: 'islands#redIcon',
                     iconColor: '#1e293b'
                 });
                 
-                myMap.geoObjects.add(placemark);
+                map.geoObjects.add(placemark);
                 
-                // Принудительно обновляем карту после загрузки
-                setTimeout(function() {
-                    if (myMap) {
-                        myMap.container.fitToViewport();
-                    }
-                }, 200);
-                
-                console.log('Карта успешно загружена');
-                
+                // Адаптация карты при изменении размера окна
+                window.addEventListener('resize', function() {
+                    map.container.fitToViewport();
+                });
             } catch (error) {
                 console.error('Ошибка загрузки карты:', error);
-                mapElement.innerHTML = '<div style="width: 100%; height: 100%; background: #f1f5f9; display: flex; align-items: center; justify-content: center; border-radius: 24px; color: #64748b; text-align: center; padding: 20px;">Карта временно недоступна. Пожалуйста, попробуйте позже.</div>';
+                document.getElementById('map').innerHTML = '<div style="width: 100%; height: 100%; background: #f1f5f9; display: flex; align-items: center; justify-content: center; border-radius: 32px;"><p style="color: #64748b;">Карта временно недоступна</p></div>';
             }
         }
-        
-        // Ждем загрузки API и DOM
-        ymaps.ready(function() {
-            // Небольшая задержка, чтобы убедиться, что DOM полностью загружен
-            setTimeout(initMap, 100);
-        });
-        
-        // Обновляем карту при изменении размера окна
-        window.addEventListener('resize', function() {
-            if (myMap) {
-                setTimeout(function() {
-                    myMap.container.fitToViewport();
-                }, 100);
-            }
-        });
         
         // Функция открытия модального окна
         function showSuccessModal() {
             const modal = document.getElementById('successModal');
             modal.style.display = 'flex';
+            
+            // Блокируем прокрутку страницы
             document.body.style.overflow = 'hidden';
         }
         
@@ -206,7 +193,11 @@
         function closeModal() {
             const modal = document.getElementById('successModal');
             modal.style.display = 'none';
+            
+            // Возвращаем прокрутку
             document.body.style.overflow = 'auto';
+            
+            // Опционально: очищаем форму
             document.getElementById('bookingForm').reset();
         }
         
@@ -246,8 +237,7 @@
             // Телефон
             const phoneInput = document.getElementById('phone');
             const phoneError = document.getElementById('phoneError');
-            // Упрощенная проверка телефона
-            const phoneRegex = /^(\+7|7|8)?[\s\-]?\(?[0-9]{3}\)?[\s\-]?[0-9]{3}[\s\-]?[0-9]{2}[\s\-]?[0-9]{2}$/;
+            const phoneRegex = /^\+7\s?\(?\d{3}\)?\s?\d{3}\s?-?\d{2}\s?-?\d{2}$/;
             if (phoneInput.value.trim() === '' || !phoneRegex.test(phoneInput.value.trim())) {
                 phoneInput.classList.add('error');
                 phoneError.classList.add('show');
@@ -269,7 +259,10 @@
             }
             
             if (isValid) {
+                // Показываем модальное окно вместо alert
                 showSuccessModal();
+                
+                // Здесь можно добавить реальную отправку формы
                 console.log('Форма отправлена:', {
                     name: nameInput.value.trim(),
                     phone: phoneInput.value.trim(),
@@ -278,7 +271,7 @@
                 });
             }
             
-            return false;
+            return false; // Отключаем реальную отправку для демонстрации
         }
     </script>
 </body>
