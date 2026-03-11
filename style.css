@@ -1226,7 +1226,6 @@ html {
         -webkit-backdrop-filter: blur(15px);
         border-radius: 40px;
         border: 1px solid rgba(255, 255, 255, 0.9);
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(255, 255, 255, 0.5) inset;
         z-index: 1000;
     }
     
@@ -1274,7 +1273,6 @@ html {
         height: 44px;
         background: white;
         border-radius: 50%;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(255, 255, 255, 0.8);
         font-size: 24px;
         transition: all 0.2s ease;
         margin: 0 auto;
@@ -1311,7 +1309,6 @@ html {
     .sidebar a.active::before {
         background: #1e293b;
         color: white;
-        box-shadow: 0 4px 12px rgba(30, 41, 59, 0.3), 0 0 0 2px white;
     }
     
     /* Для страницы входа меняем содержимое иконки */
@@ -1983,3 +1980,4 @@ html {
         display: none;
     }
 }
+
