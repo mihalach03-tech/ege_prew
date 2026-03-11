@@ -57,8 +57,10 @@
         </div>
         
         <div class="contacts-photo">
-            <!-- Контейнер для Яндекс Карты -->
-            <div id="map" style="width: 100%; height: 300px; border-radius: 32px; overflow: hidden; box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.3);"></div>
+            <div class="photo" style="height: 350px;">
+                <!-- Контейнер для Яндекс Карты -->
+                <div id="map" style="width: 100%; height: 100%;"></div>
+            </div>
         </div>
     </div>
     
@@ -115,7 +117,6 @@
         </div>
     </div>
 
-    <!-- Добавьте стили для анимации модального окна -->
     <style>
         @keyframes modalSlideUp {
             from {
@@ -127,24 +128,12 @@
                 transform: translateY(0);
             }
         }
-        
-        @media (max-width: 768px) {
-            #successModal > div {
-                padding: 30px;
-                width: 95%;
-            }
-            
-            #successModal h3 {
-                font-size: 24px;
-            }
-            
-            #successModal p {
-                font-size: 15px;
-            }
-        }
     </style>
 
     <script>
+        // Глобальная переменная для карты
+        var myMap;
+        
         // Инициализация карты
         ymaps.ready(initMap);
         
@@ -153,7 +142,8 @@
                 // Координаты центра (ул. Фрунзе, 18, Тула)
                 var mapCenter = [54.189371, 37.590821];
                 
-                var map = new ymaps.Map('map', {
+                // Создаем карту
+                myMap = new ymaps.Map('map', {
                     center: mapCenter,
                     zoom: 16,
                     controls: ['zoomControl', 'fullscreenControl']
@@ -168,15 +158,25 @@
                     iconColor: '#1e293b'
                 });
                 
-                map.geoObjects.add(placemark);
+                myMap.geoObjects.add(placemark);
                 
-                // Адаптация карты при изменении размера окна
+                // Принудительно обновляем карту после загрузки
+                setTimeout(function() {
+                    myMap.container.fitToViewport();
+                }, 200);
+                
+                // Обновляем карту при изменении размера окна
                 window.addEventListener('resize', function() {
-                    map.container.fitToViewport();
+                    if (myMap) {
+                        setTimeout(function() {
+                            myMap.container.fitToViewport();
+                        }, 100);
+                    }
                 });
+                
             } catch (error) {
                 console.error('Ошибка загрузки карты:', error);
-                document.getElementById('map').innerHTML = '<div style="width: 100%; height: 100%; background: #f1f5f9; display: flex; align-items: center; justify-content: center; border-radius: 32px;"><p style="color: #64748b;">Карта временно недоступна</p></div>';
+                document.getElementById('map').innerHTML = '<div style="width: 100%; height: 100%; background: #f1f5f9; display: flex; align-items: center; justify-content: center; border-radius: 32px; color: #64748b;">Карта временно недоступна</div>';
             }
         }
         
@@ -184,8 +184,6 @@
         function showSuccessModal() {
             const modal = document.getElementById('successModal');
             modal.style.display = 'flex';
-            
-            // Блокируем прокрутку страницы
             document.body.style.overflow = 'hidden';
         }
         
@@ -193,11 +191,7 @@
         function closeModal() {
             const modal = document.getElementById('successModal');
             modal.style.display = 'none';
-            
-            // Возвращаем прокрутку
             document.body.style.overflow = 'auto';
-            
-            // Опционально: очищаем форму
             document.getElementById('bookingForm').reset();
         }
         
@@ -259,10 +253,7 @@
             }
             
             if (isValid) {
-                // Показываем модальное окно вместо alert
                 showSuccessModal();
-                
-                // Здесь можно добавить реальную отправку формы
                 console.log('Форма отправлена:', {
                     name: nameInput.value.trim(),
                     phone: phoneInput.value.trim(),
@@ -271,7 +262,7 @@
                 });
             }
             
-            return false; // Отключаем реальную отправку для демонстрации
+            return false;
         }
     </script>
 </body>
