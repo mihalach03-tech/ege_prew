@@ -1729,17 +1729,6 @@ html {
     -webkit-backdrop-filter: blur(5px);
 }
 
-/* Добавить поддержку свайпа */
-.carousel-track {
-    cursor: grab;
-    user-select: none;
-    -webkit-user-select: none;
-    touch-action: pan-y pinch-zoom;
-}
-
-.carousel-track:active {
-    cursor: grabbing;
-}
 .carousel-track .review-card:hover {
     transform: translateY(-5px);
     box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.2);
@@ -1805,97 +1794,192 @@ html {
     border-radius: 12px;
 }
 
-@media (max-width: 768px) {
-    .carousel-track .review-card {
-        flex: 0 0 calc(50% - 12px);
+/* Десктоп версия */
+@media (min-width: 769px) {
+    .carousel-track {
+        cursor: grab;
+        user-select: none;
+        -webkit-user-select: none;
     }
     
-    .carousel-btn {
-        width: 40px;
-        height: 40px;
-        font-size: 20px;
+    .carousel-track:active {
+        cursor: grabbing;
     }
 }
 
-@media (max-width: 480px) {
-    .carousel-track .review-card {
-        flex: 0 0 100%;
-    }
-    
+/* Мобильная версия - ТОЛЬКО ОДИН ОТЗЫВ */
+@media (max-width: 768px) {
+    /* Отключаем карусель - показываем только один отзыв */
     .carousel-container {
-        gap: 8px;
+        flex-direction: column;
+        gap: 20px;
     }
     
+    .carousel-track-wrapper {
+        width: 100%;
+        overflow: visible;
+    }
+    
+    .carousel-track {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 0;
+        transform: none !important; /* Отключаем трансформацию */
+    }
+    
+    .carousel-track .review-card {
+        flex: none;
+        width: 100%;
+        min-width: auto;
+        display: block;
+        margin: 0 auto;
+    }
+    
+    /* Скрываем все отзывы кроме первого */
+    .carousel-track .review-card:not(:first-child) {
+        display: none;
+    }
+    
+    /* Отключаем кнопки навигации */
     .carousel-btn {
-        width: 36px;
-        height: 36px;
-        font-size: 18px;
+        display: none;
     }
     
-    /* Добавить новые стили для мобильной версии */
+    /* Отключаем точки */
+    .carousel-dots {
+        display: none;
+    }
+    
+    /* Отключаем все свайп-функциональность */
+    .carousel-track {
+        cursor: default;
+        user-select: text;
+        -webkit-user-select: text;
+        touch-action: auto;
+        -webkit-overflow-scrolling: auto;
+        scroll-snap-type: none;
+    }
+    
+    .carousel-track:active {
+        cursor: default;
+    }
+}
+
+/* Маленькие телефоны */
+@media (max-width: 480px) {
     .carousel-container {
         margin: 20px 0;
     }
     
-    .carousel-btn {
-        background: rgba(30, 41, 59, 0.9);
-        backdrop-filter: blur(5px);
-        -webkit-backdrop-filter: blur(5px);
-        border: 1px solid rgba(255, 255, 255, 0.3);
+    .carousel-track .review-card {
+        padding: 24px;
+    }
+}
+
+/* ===== ЯНДЕКС КАРТА ===== */
+/* Улучшенные стили для карты на всех устройствах */
+.contacts-photo .photo {
+    width: 100%;
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.3);
+    background: #f0f0f0; /* Цвет фона на время загрузки */
+    min-height: 300px; /* Минимальная высота для карты */
+}
+
+.contacts-photo .photo iframe,
+.contacts-photo .photo ymaps {
+    width: 100% !important;
+    height: 100% !important;
+    min-height: 350px;
+    display: block;
+    border: none;
+    border-radius: 24px;
+}
+
+/* Мобильная версия для карты */
+@media (max-width: 768px) {
+    #contacts {
+        flex-direction: column;
+        gap: 25px;
     }
     
-    .carousel-track-wrapper {
+    .contacts-content {
+        width: 100%;
+        order: 1; /* Текст сверху */
+    }
+    
+    .contacts-photo {
+        width: 100%;
+        max-width: 100%;
+        left: 0;
+        top: 0;
+        order: 2; /* Карта снизу */
+        margin-top: 20px;
+    }
+    
+    .contacts-photo .photo {
+        width: 100%;
+        min-height: 300px;
         border-radius: 20px;
     }
     
-    .carousel-dots {
-        margin-top: 15px;
+    .contacts-photo .photo iframe,
+    .contacts-photo .photo ymaps {
+        min-height: 300px;
+        border-radius: 20px;
     }
     
-    .carousel-dot {
-        width: 8px;
-        height: 8px;
-    }
-    
-    .carousel-dot.active {
-        width: 20px;
-    }
-}
-
-/* Поддержка свайпа для мобильных устройств */
-@media (max-width: 768px) {
-    .carousel-track {
-        touch-action: pan-x;
-        -webkit-overflow-scrolling: touch;
-        scroll-snap-type: x mandatory;
-    }
-    
-    .carousel-track .review-card {
-        scroll-snap-align: start;
-    }
-}
-
-@media (max-width: 480px) {
-    .carousel-container {
-        -webkit-tap-highlight-color: transparent;
-    }
-    
-    .carousel-btn {
-        -webkit-tap-highlight-color: transparent;
-    }
-}
-
-/* Добавить в конец файла для отладки */
-@media (max-width: 768px) {
-    /* Визуальная подсказка, что карта загружена */
+    /* Убеждаемся, что карта видна */
     .contacts-photo::after {
-        display: none; /* Убрать после отладки */
+        display: none;
     }
     
-    /* Убедиться, что карта не прозрачная */
     .contacts-photo iframe {
         opacity: 1 !important;
         visibility: visible !important;
         display: block !important;
+        pointer-events: auto; /* Включаем взаимодействие с картой */
+    }
+}
+
+@media (max-width: 480px) {
+    .contacts-photo .photo {
+        min-height: 250px;
+    }
+    
+    .contacts-photo .photo iframe,
+    .contacts-photo .photo ymaps {
+        min-height: 250px;
+    }
+}
+
+/* Исправление для очень маленьких экранов */
+@media (max-width: 320px) {
+    .contacts-photo .photo {
+        min-height: 200px;
+    }
+    
+    .contacts-photo .photo iframe,
+    .contacts-photo .photo ymaps {
+        min-height: 200px;
+    }
+}
+
+/* Дополнительные стили для гарантированного отображения карты */
+[class*="ymaps"] {
+    width: 100% !important;
+}
+
+.contacts-photo {
+    position: relative;
+    z-index: 1;
+}
+
+/* Убираем лишние стили из отладки */
+@media (max-width: 768px) {
+    /* Удаляем старые отладочные стили */
+    .contacts-photo::after {
+        display: none;
     }
 }
