@@ -1851,9 +1851,91 @@ html {
     }
 }
 
+/* ===== ЯНДЕКС КАРТА ===== */
+/* Мобильная версия для карты */
+@media (max-width: 768px) {
+    #contacts {
+        flex-direction: column;
+        gap: 25px;
+    }
+    
+    .contacts-content {
+        width: 100%;
+        order: 1; /* Текст сверху */
+    }
+    
+    .contacts-photo {
+        width: 100%;
+        max-width: 100%;
+        left: 0;
+        top: 0;
+        order: 2; /* Карта снизу */
+        margin-top: 20px;
+    }
+    
+    .contacts-photo .photo {
+        width: 100%;
+        min-height: 300px;
+        border-radius: 20px;
+    }
+    
+    .contacts-photo .photo iframe,
+    .contacts-photo .photo ymaps {
+        min-height: 300px;
+        border-radius: 20px;
+    }
+    
+    /* Убеждаемся, что карта видна */
+    .contacts-photo::after {
+        display: none;
+    }
+    
+    .contacts-photo iframe {
+        opacity: 1 !important;
+        visibility: visible !important;
+        display: block !important;
+        pointer-events: auto; /* Включаем взаимодействие с картой */
+    }
+}
 
+@media (max-width: 480px) {
+    .contacts-photo .photo {
+        min-height: 250px;
+    }
+    
+    .contacts-photo .photo iframe,
+    .contacts-photo .photo ymaps {
+        min-height: 250px;
+    }
+}
 
+/* Исправление для очень маленьких экранов */
+@media (max-width: 320px) {
+    .contacts-photo .photo {
+        min-height: 200px;
+    }
+    
+    .contacts-photo .photo iframe,
+    .contacts-photo .photo ymaps {
+        min-height: 200px;
+    }
+}
 
+/* Дополнительные стили для гарантированного отображения карты */
+[class*="ymaps"] {
+    width: 100% !important;
+}
 
+.contacts-photo {
+    position: relative;
+    z-index: 1;
+}
 
+/* Убираем лишние стили из отладки */
+@media (max-width: 768px) {
+    /* Удаляем старые отладочные стили */
+    .contacts-photo::after {
+        display: none;
+    }
+}
 
