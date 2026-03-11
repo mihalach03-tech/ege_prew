@@ -409,8 +409,7 @@ input[type="submit"]:hover {
 }
 
 .contacts-photo {
-    flex: 1;
-    max-width: 700px;
+    max-width: 500px;
     position: relative;
     left: -90px;
     top: 250px;
@@ -902,8 +901,6 @@ input[type="file"] {
     opacity: 0.8;
     font-style: italic;
 }
-
-/* ===== ЛАБОРАТОРНЫЕ РАБОТЫ ===== */
 
 /* ===== ДОПОЛНИТЕЛЬНАЯ ИНФОРМАЦИЯ ===== */
 .info-grid {
@@ -1960,6 +1957,7 @@ html {
         display: none;
     }
 }
+
 
 
 
