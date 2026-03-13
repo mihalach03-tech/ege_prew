@@ -6,105 +6,242 @@
     <title>Дополнительно — Подготовка к ЕГЭ по информатике</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@600&display=swap" rel="stylesheet">
+    <style>
+        /* Контейнер для бесконечной ленты */
+        .infinite-scroll-container {
+            width: 100%;
+            overflow: hidden;
+            position: relative;
+            padding: 20px 0;
+        }
+
+        /* Градиентные маски по бокам для эффекта затухания */
+        .infinite-scroll-container:before,
+        .infinite-scroll-container:after {
+            content: '';
+            position: absolute;
+            top: 0;
+            width: 150px;
+            height: 100%;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        .infinite-scroll-container:before {
+            left: 0;
+            background: linear-gradient(90deg, white 0%, rgba(255,255,255,0) 100%);
+        }
+
+        .infinite-scroll-container:after {
+            right: 0;
+            background: linear-gradient(-90deg, white 0%, rgba(255,255,255,0) 100%);
+        }
+
+        /* Лента с отзывами */
+        .reviews-ticker {
+            display: flex;
+            gap: 30px;
+            animation: scroll 40s linear infinite;
+            width: fit-content;
+            padding: 10px 0;
+        }
+
+        /* Эффект замедления при наведении */
+        .reviews-ticker:hover {
+            animation-play-state: paused;
+        }
+
+        /* Анимация бесконечной прокрутки */
+        @keyframes scroll {
+            0% {
+                transform: translateX(0);
+            }
+            100% {
+                transform: translateX(calc(-50% - 15px));
+            }
+        }
+
+        /* Карточка отзыва */
+        .review-card {
+            flex: 0 0 350px;
+            background: white;
+            border-radius: 20px;
+            padding: 30px 25px;
+            box-shadow: 0 20px 40px rgba(102, 126, 234, 0.3);
+            color: white;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Декоративный элемент */
+        .review-card:before {
+            content: '"';
+            position: absolute;
+            top: -20px;
+            right: 10px;
+            font-size: 150px;
+            color: rgba(255, 255, 255, 0.1);
+            font-family: serif;
+            line-height: 1;
+        }
+
+        .review-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 30px 60px rgba(102, 126, 234, 0.4);
+        }
+
+
+        .review-text {
+            font-size: 16px;
+            line-height: 1.7;
+            margin-bottom: 20px;
+            font-style: italic;
+            position: relative;
+            z-index: 1;
+            min-height: 100px;
+        }
+
+        .review-rating {
+            color: #ffd700;
+            font-size: 22px;
+            letter-spacing: 3px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* Статистика отзывов */
+        .reviews-stats {
+            display: flex;
+            justify-content: center;
+            gap: 50px;
+            margin: 40px 0 20px;
+            padding: 20px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 36px;
+            font-weight: 700;
+            color: #667eea;
+            line-height: 1;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: #64748b;
+            margin-top: 5px;
+        }
+
+        /* Исправленная мобильная версия */
+        @media (max-width: 768px) {
+            .review-card {
+                flex: 0 0 280px;
+                padding: 20px;
+            }
+            
+            .review-author {
+                font-size: 18px;
+                margin-bottom: 10px;
+            }
+            
+            .review-text {
+                font-size: 14px;
+                line-height: 1.5;
+                min-height: 70px;
+                margin-bottom: 15px;
+            }
+            
+            .review-rating {
+                font-size: 18px;
+                letter-spacing: 2px;
+            }
+            
+            .reviews-stats {
+                gap: 15px;
+                flex-wrap: wrap;
+                padding: 15px;
+                margin: 30px 0 15px;
+            }
+            
+            .stat-item {
+                flex: 1 1 auto;
+                min-width: 80px;
+            }
+            
+            .stat-value {
+                font-size: 24px;
+            }
+            
+            .stat-label {
+                font-size: 12px;
+            }
+            
+            .infinite-scroll-container:before,
+            .infinite-scroll-container:after {
+                width: 40px;
+            }
+            
+            .reviews-ticker {
+                gap: 15px;
+                animation: scroll 30s linear infinite;
+            }
+        }
+
+        /* Для очень маленьких экранов */
+        @media (max-width: 480px) {
+            .review-card {
+                flex: 0 0 240px;
+                padding: 15px;
+            }
+            
+            .review-author {
+                font-size: 16px;
+                margin-bottom: 8px;
+            }
+            
+            .review-text {
+                font-size: 13px;
+                min-height: 60px;
+                margin-bottom: 12px;
+            }
+            
+            .review-rating {
+                font-size: 16px;
+            }
+            
+            .reviews-stats {
+                gap: 10px;
+                padding: 12px;
+            }
+            
+            .stat-value {
+                font-size: 20px;
+            }
+            
+            .stat-label {
+                font-size: 11px;
+            }
+            
+            .infinite-scroll-container:before,
+            .infinite-scroll-container:after {
+                width: 30px;
+            }
+            
+            .reviews-ticker {
+                gap: 12px;
+            }
+        }
+    </style>
 </head>
 <!-- Подключение jQuery -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-$(document).ready(function() {
-    // ===== КАРУСЕЛЬ ОТЗЫВОВ =====
-    const track = $('#reviewsTrack');
-    const cards = $('.review-card');
-    
-    if (track.length && cards.length > 0) {
-        const originalCount = cards.length;
-        let currentIndex = 0;
-        let animationInProgress = false;
-        
-        // Функция для обновления позиции
-        function updateCarousel(animate = true) {
-            const cardWidth = cards.first().outerWidth(true);
-            
-            if (animate) {
-                track.css('transition', 'transform 0.5s ease-in-out');
-            } else {
-                track.css('transition', 'none');
-            }
-            
-            track.css('transform', `translateX(-${currentIndex * cardWidth}px)`);
-            
-            // Обновляем состояние кнопок
-            updateButtons();
-        }
-        
-        // Функция для обновления кнопок
-        function updateButtons() {
-            $('#slideLeft').prop('disabled', currentIndex === 0);
-            $('#slideRight').prop('disabled', currentIndex === originalCount - 1);
-            
-            // Обновляем активную точку
-            $('.carousel-dot').removeClass('active');
-            $(`.carousel-dot[data-index="${currentIndex}"]`).addClass('active');
-        }
-        
-        // Кнопка "Влево"
-        $('#slideLeft').click(function() {
-            if (animationInProgress || currentIndex === 0) return;
-            
-            animationInProgress = true;
-            currentIndex--;
-            updateCarousel(true);
-            
-            setTimeout(function() {
-                animationInProgress = false;
-            }, 500);
-        });
-        
-        // Кнопка "Вправо"
-        $('#slideRight').click(function() {
-            if (animationInProgress || currentIndex === originalCount - 1) return;
-            
-            animationInProgress = true;
-            currentIndex++;
-            updateCarousel(true);
-            
-            setTimeout(function() {
-                animationInProgress = false;
-            }, 500);
-        });
-        
-        // Точки навигации
-        const dotsContainer = $('<div class="carousel-dots"></div>');
-        for (let i = 0; i < originalCount; i++) {
-            const dot = $(`<button class="carousel-dot" data-index="${i}"></button>`);
-            dot.click(function() {
-                if (animationInProgress) return;
-                
-                const targetIndex = $(this).data('index');
-                if (targetIndex === currentIndex) return;
-                
-                animationInProgress = true;
-                currentIndex = targetIndex;
-                updateCarousel(true);
-                
-                setTimeout(function() {
-                    animationInProgress = false;
-                }, 500);
-            });
-            dotsContainer.append(dot);
-        }
-        $('.reviews-section').append(dotsContainer);
-        
-        // Инициализация
-        updateCarousel(false);
-        updateButtons();
-        
-        // Обновляем при изменении размера окна
-        $(window).resize(function() {
-            updateCarousel(false);
-        });
-    }
-});
-</script>
 <body>    
     <div class="sidebar">
         <ul>
@@ -200,55 +337,114 @@ $(document).ready(function() {
                 </div>
             </div>
             
-            <!-- Отзывы с каруселью -->
+            <!-- Отзывы с бесконечной лентой -->
             <div class="reviews-section">
                 <h3>Отзывы наших учеников</h3>
                 
-                <!-- Контейнер для карусели -->
-                <div class="carousel-container">
-                    <!-- Кнопка "влево" слева от отзыва -->
-                    <button class="carousel-btn carousel-btn-left" id="slideLeft">←</button>
-                    
-                    <!-- Обертка для карточек с отзывами -->
-                    <div class="carousel-track-wrapper">
-                        <div class="reviews-grid carousel-track" id="reviewsTrack">
-                            <div class="review-card">
-                                <span class="review-author">Анастасия</span>
-                                <p class="review-text">"Здорово! Подготовилась за полгода с нуля, сдала на 78 баллов"</p>
-                                <div class="review-rating">★★★★★</div>
-                            </div>
-                            
-                            <div class="review-card">
-                                <span class="review-author">Дмитрий</span>
-                                <p class="review-text">"Волшебно! Очень понятные объяснения, разобрали все сложные моменты"</p>
-                                <div class="review-rating">★★★★★</div>
-                            </div>
-                            
-                            <div class="review-card">
-                                <span class="review-author">Сергей</span>
-                                <p class="review-text">"Шикарно! Поступил в МГТУ им. Баумана, спасибо за подготовку"</p>
-                                <div class="review-rating">★★★★★</div>
-                            </div>
-                            
-                            <div class="review-card">
-                                <span class="review-author">Екатерина</span>
-                                <p class="review-text">"Прекрасно! За 3 месяца подтянула информатику с 50 до 87 баллов"</p>
-                                <div class="review-rating">★★★★★</div>
-                            </div>
-                            
-                            <div class="review-card">
-                                <span class="review-author">Михаил</span>
-                                <p class="review-text">"Отлично! Сдал на 92 балла, поступил в ИТМО. Спасибо!"</p>
-                                <div class="review-rating">★★★★★</div>
-                            </div>
+                <!-- Статистика -->
+                <div class="reviews-stats">
+                    <div class="stat-item">
+                        <div class="stat-value">100+</div>
+                        <div class="stat-label">выпускников</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">85%</div>
+                        <div class="stat-label">сдают на 80+ баллов</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">4.8</div>
+                        <div class="stat-label">средний рейтинг</div>
+                    </div>
+                </div>
+                
+                <!-- Контейнер для бесконечной ленты -->
+                <div class="infinite-scroll-container">
+                    <div class="reviews-ticker" id="reviewsTicker">
+                        <!-- Первый набор отзывов -->
+                        <div class="review-card">
+                            <span class="review-author">Анастасия</span>
+                            <p class="review-text">"Здорово! Подготовилась за полгода с нуля, сдала на 78 баллов. Очень довольна результатом!"</p>
+                            <div class="review-rating">★★★★★</div>
+                        </div>
+                        
+                        <div class="review-card">
+                            <span class="review-author">Дмитрий</span>
+                            <p class="review-text">"Волшебно! Очень понятные объяснения, разобрали все сложные моменты. Спасибо большое!"</p>
+                            <div class="review-rating">★★★★★</div>
+                        </div>
+                        
+                        <div class="review-card">
+                            <span class="review-author">Сергей</span>
+                            <p class="review-text">"Шикарно! Поступил в МГТУ им. Баумана, спасибо за подготовку. Всем рекомендую!"</p>
+                            <div class="review-rating">★★★★★</div>
+                        </div>
+                        
+                        <div class="review-card">
+                            <span class="review-author">Екатерина</span>
+                            <p class="review-text">"Прекрасно! За 3 месяца подтянула информатику с 50 до 87 баллов. Отличный курс!"</p>
+                            <div class="review-rating">★★★★★</div>
+                        </div>
+                        
+                        <div class="review-card">
+                            <span class="review-author">Михаил</span>
+                            <p class="review-text">"Отлично! Сдал на 92 балла, поступил в ИТМО. Спасибо за знания и поддержку!"</p>
+                            <div class="review-rating">★★★★★</div>
+                        </div>
+                        
+                        <!-- Дублируем отзывы для бесконечной прокрутки -->
+                        <div class="review-card">
+                            <span class="review-author">Анастасия</span>
+                            <p class="review-text">"Здорово! Подготовилась за полгода с нуля, сдала на 78 баллов. Очень довольна результатом!"</p>
+                            <div class="review-rating">★★★★★</div>
+                        </div>
+                        
+                        <div class="review-card">
+                            <span class="review-author">Дмитрий</span>
+                            <p class="review-text">"Волшебно! Очень понятные объяснения, разобрали все сложные моменты. Спасибо большое!"</p>
+                            <div class="review-rating">★★★★★</div>
+                        </div>
+                        
+                        <div class="review-card">
+                            <span class="review-author">Сергей</span>
+                            <p class="review-text">"Шикарно! Поступил в МГТУ им. Баумана, спасибо за подготовку. Всем рекомендую!"</p>
+                            <div class="review-rating">★★★★★</div>
+                        </div>
+                        
+                        <div class="review-card">
+                            <span class="review-author">Екатерина</span>
+                            <p class="review-text">"Прекрасно! За 3 месяца подтянула информатику с 50 до 87 баллов. Отличный курс!"</p>
+                            <div class="review-rating">★★★★★</div>
+                        </div>
+                        
+                        <div class="review-card">
+                            <span class="review-author">Михаил</span>
+                            <p class="review-text">"Отлично! Сдал на 92 балла, поступил в ИТМО. Спасибо за знания и поддержку!"</p>
+                            <div class="review-rating">★★★★★</div>
                         </div>
                     </div>
-                    
-                    <!-- Кнопка "вправо" справа от отзыва -->
-                    <button class="carousel-btn carousel-btn-right" id="slideRight">→</button>
                 </div>
             </div>
         </div>
     </div>
+
+    <script>
+    $(document).ready(function() {
+        // Эффект появления отзывов
+        $('.review-card').each(function(index) {
+            $(this).css({
+                'opacity': '0',
+                'transform': 'translateY(20px)'
+            });
+            
+            setTimeout(() => {
+                $(this).css({
+                    'transition': 'all 0.5s ease',
+                    'opacity': '1',
+                    'transform': 'translateY(0)'
+                });
+            }, index * 100);
+        });
+    });
+    </script>
 </body>
 </html>
