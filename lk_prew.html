@@ -6,6 +6,49 @@
     <title>Вход в личный кабинет — Подготовка к ЕГЭ по информатике</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@600&display=swap" rel="stylesheet">
+    <style>
+        .captcha-container {
+            margin: 15px 0;
+            text-align: center;
+        }
+        
+        #captchaCanvas {
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            background: #f8fafc;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        #captchaCanvas:hover {
+            border-color: #3b82f6;
+            transform: scale(1.01);
+        }
+        
+        .captcha-refresh {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 8px;
+            color: #64748b;
+            font-size: 14px;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+        
+        .captcha-refresh:hover {
+            color: #3b82f6;
+        }
+        
+        .captcha-refresh span {
+            font-size: 18px;
+        }
+        
+        .captcha-input {
+            margin-top: 15px;
+        }
+    </style>
 </head>
 <body>    
     <div class="sidebar">
@@ -34,12 +77,26 @@
                 <div class="login-form">
                     <div class="form-group">
                         <label for="username">Имя пользователя</label>
-                        <input type="text" id="username" >
+                        <input type="text" id="username">
                     </div>
                     
                     <div class="form-group">
                         <label for="password">Пароль</label>
                         <input type="password" id="password">
+                    </div>
+                    
+                    <!-- Капча -->
+                    <div class="form-group captcha-group">
+                        <label>Проверочный код</label>
+                        <div class="captcha-container">
+                            <canvas id="captchaCanvas" width="200" height="60"></canvas>
+                            <div class="captcha-refresh" onclick="generateCaptcha()">
+                                <span>🔄</span> Обновить код
+                            </div>
+                        </div>
+                        <div class="captcha-input">
+                            <input type="text" id="captchaInput" placeholder="Введите код с картинки">
+                        </div>
                     </div>
                     
                     <button class="login-btn" onclick="login()">Войти в кабинет</button>
@@ -52,9 +109,61 @@
     </div>
     
     <script>
+        let currentCaptcha = '';
+        
+        // Функция генерации случайного цвета
+        function getRandomColor() {
+            const letters = '0123456789ABCDEF';
+            let color = '#';
+            for (let i = 0; i < 6; i++) {
+                color += letters[Math.floor(Math.random() * 16)];
+            }
+            return color;
+        }
+        
+        // Функция генерации капчи
+        function generateCaptcha() {
+            const canvas = document.getElementById('captchaCanvas');
+            const ctx = canvas.getContext('2d');
+            
+            // Очищаем canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+          
+            
+            // Генерируем случайный 6-значный код
+            const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789';
+            currentCaptcha = '';
+            for (let i = 0; i < 6; i++) {
+                currentCaptcha += chars[Math.floor(Math.random() * chars.length)];
+            }
+            
+            // Рисуем текст капчи
+            for (let i = 0; i < currentCaptcha.length; i++) {
+                const x = 20 + i * 28;
+                const y = 35 + Math.random() * 10 - 5;
+                
+                ctx.save();
+                ctx.translate(x, y);
+                ctx.rotate((Math.random() * 30 - 15) * Math.PI / 180);
+                
+                // Случайный размер шрифта
+                const fontSize = 24 + Math.random() * 8;
+                ctx.font = `bold ${fontSize}px 'Montserrat', 'Inter', sans-serif`;
+                
+                // Случайный цвет для каждой буквы
+                ctx.fillStyle = getRandomColor();
+                ctx.fillText(currentCaptcha[i], 0, 0);
+                
+                ctx.restore();
+            }
+            
+            
+        }
+        
         function login() {
             const username = document.getElementById('username').value.trim();
             const password = document.getElementById('password').value.trim();
+            const captchaInput = document.getElementById('captchaInput').value.trim();
             const errorMessage = document.getElementById('errorMessage');
             const successMessage = document.getElementById('successMessage');
             
@@ -70,6 +179,22 @@
             if (password === '') {
                 errorMessage.textContent = 'Пожалуйста, введите пароль';
                 errorMessage.style.display = 'block';
+                return;
+            }
+            
+            if (captchaInput === '') {
+                errorMessage.textContent = 'Пожалуйста, введите проверочный код';
+                errorMessage.style.display = 'block';
+                generateCaptcha(); // Обновляем капчу при ошибке
+                return;
+            }
+            
+            // Проверка капчи (регистронезависимая)
+            if (captchaInput.toUpperCase() !== currentCaptcha.toUpperCase()) {
+                errorMessage.textContent = 'Неверный проверочный код. Попробуйте снова.';
+                errorMessage.style.display = 'block';
+                document.getElementById('captchaInput').value = ''; // Очищаем поле
+                generateCaptcha(); // Генерируем новую капчу
                 return;
             }
             
@@ -100,7 +225,10 @@
                 }, 1500);
                 
             } else {
+                errorMessage.textContent = 'Неверный логин или пароль. Попробуйте снова.';
                 errorMessage.style.display = 'block';
+                generateCaptcha(); // Обновляем капчу при ошибке
+                document.getElementById('captchaInput').value = ''; // Очищаем поле
             }
         }
         
@@ -109,6 +237,17 @@
                 login();
             }
         });
+        
+        // Генерируем капчу при загрузке страницы
+        window.onload = function() {
+            generateCaptcha();
+            
+            // Добавляем возможность обновить капчу по клику на canvas
+            document.getElementById('captchaCanvas').addEventListener('click', function() {
+                generateCaptcha();
+                document.getElementById('captchaInput').value = ''; // Очищаем поле при обновлении
+            });
+        };
     </script>
 </body>
 </html>
